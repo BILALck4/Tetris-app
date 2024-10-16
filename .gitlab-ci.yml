@@ -1,30 +1,45 @@
+# Define stages in the pipeline
 stages:
   - build
   - test
+  - package
   - deploy
 
-
-compile_job:
+# Build stage: Compile the Java code using Ant
+build:
   stage: build
-  image: openjdk:17  # Use a pre-configured image for Java
   script:
-    - apt-get update && apt-get install -y ant
-    - ant compile
+    - echo "Building the project..."
+    - apt-get update -qq && apt-get install -y -qq ant openjdk-17-jdk
+    - ant clean compile
   artifacts:
     paths:
       - bin/
 
-
-test_job:
+# Test stage: Run tests using JUnit and Ant
+test:
   stage: test
-  image: openjdk:17
   script:
-    - apt-get update && apt-get install -y ant
-    - ant test
-  dependencies:
-    - compile_job
+    - echo "Running tests..."
+    - ant test-reports
+  artifacts:
+    paths:
+      - test-reports/
+    reports:
+      junit: test-reports/TESTS-TestSuites.xml
 
-deploy_job:
+# Package stage: Create the JAR file using Ant
+package:
+  stage: package
+  script:
+    - echo "Packaging the application into a JAR..."
+    - ant dist
+  artifacts:
+    paths:
+      - bin/Tetris.jar
+
+# Deploy stage: Deploy the JAR file to a remote server
+deploy:
   stage: deploy
   script:
     - echo "Déploiement en cours..."
