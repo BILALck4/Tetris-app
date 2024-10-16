@@ -1,3 +1,5 @@
+image: openjdk:17-slim
+
 # Define stages in the pipeline
 stages:
   - build
@@ -10,7 +12,7 @@ build:
   stage: build
   script:
     - echo "Building the project..."
-    - apt-get update -qq && apt-get install -y -qq ant openjdk-17-jdk
+    - apt-get update && apt-get install -y ant
     - ant clean compile
   artifacts:
     paths:
@@ -44,6 +46,6 @@ deploy:
   script:
     - echo "Déploiement en cours..."
     - scp -r bin/ e22409386@gitlab-depinfo-2024.univ-brest.fr:/home/e22409386/tetris_project/
-
   only:
-    - master
+    - master  # Adjust this if you want to deploy from other branches as well
+
