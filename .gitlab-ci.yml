@@ -1,18 +1,22 @@
-image: ubuntu:latest
+image: docker:latest
 
 stages:
   - build
-  - test
 
-before_script:
-  - apt-get update && apt-get install -y ant openjdk-17-jdk openjdk-17-jre
+variables:
+  DOCKER_IMAGE: "tetris-app"
 
 build:
   stage: build
   script:
-    - ant dist  # Adjust this command based on your build process
-
-test:
-  stage: test
-  script:
-    - ant test  # Adjust this command based on your test process
+    - echo "Checking files in current directory:"
+    - ls -l 
+    - docker build --no-cache -t $DOCKER_IMAGE .  
+    - docker create --name temp_container $DOCKER_IMAGE
+    - docker cp temp_container:/app/Tetris.jar .  
+    - docker rm temp_container
+  only:
+    - main
+  artifacts:
+    paths:
+      - Tetris.jar  
