@@ -19,4 +19,4 @@ build:
     - main
   artifacts:
     paths:
-      - Tetris.jar  
+      - dist/Tetris.jar  

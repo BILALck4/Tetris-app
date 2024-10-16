@@ -84,7 +84,8 @@
 		
 		
 		<target name="dist" depends="compile">
-		    <jar jarfile="${obj.dir}/Tetris.jar" basedir="${obj.dir}">
+			<mkdir dir="dist" />
+		    <jar jarfile="dist/Tetris.jar" basedir="${obj.dir}">
 		        <manifest>
 	                <attribute name="Built-By" value="Bilal CHEKHCHOU" />
 		            <attribute name="Main-Class" value="fr.ubo.tetris.Tetris" />
