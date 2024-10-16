@@ -8,12 +8,19 @@ variables:
 
 build:
   stage: build
+  services:
+    - docker:dind  # Use Docker-in-Docker service
+  variables:
+    DOCKER_HOST: tcp://docker:2375  # Set Docker host for the service
+    DOCKER_DRIVER: overlay2  # Use the overlay2 storage driver
   script:
     - echo "Checking files in current directory:"
     - ls -l 
     - docker build --no-cache -t $DOCKER_IMAGE .  
+    - echo "Creating temporary container..."
     - docker create --name temp_container $DOCKER_IMAGE
-    - docker cp temp_container:/app/Tetris.jar .  
+    - echo "Copying Tetris.jar from container..."
+    - docker cp temp_container:/app/dist/Tetris.jar .  # Adjust the path if necessary
     - docker rm temp_container
   only:
     - main
