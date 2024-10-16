@@ -5,6 +5,12 @@ stages:
   - dist
   - deploy
 
+before_script:
+  - echo "Setting up Ivy..."
+  - wget -q https://repo1.maven.org/maven2/org/apache/ivy/ivy/2.5.2/ivy-2.5.2.jar
+  - mkdir -p ~/.ant/lib
+  - mv ivy-2.5.2.jar ~/.ant/lib/ivy.jar
+
 build:
   stage: build
   image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
