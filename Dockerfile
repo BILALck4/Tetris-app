@@ -1,39 +1,27 @@
-FROM alpine:latest
+FROM ubuntu:latest
 
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
 COPY . .
 
-# Define environment variables for Ivy
 ENV IVY_VERSION=2.5.2
 ENV IVY_HOME=/usr/local/ivy
 ENV IVY_JAR_PATH=$IVY_HOME/ivy-${IVY_VERSION}.jar
 
-# Define environment variables for Ant
-ENV ANT_VERSION=1.10.12
-ENV ANT_HOME=/usr/local/apache-ant
-ENV PATH=$PATH:$ANT_HOME/bin
+RUN apt-get update && \
+    apt-get install -y ant curl && \
+    apt-get clean
 
-# Install Java, curl, and other necessary tools
-RUN apk add --no-cache openjdk17 curl bash wget unzip
+RUN mkdir -p /usr/local/ivy && \
+    curl -L https://dlcdn.apache.org/ant/ivy/2.5.2/apache-ivy-2.5.2-bin.tar.gz | tar xz -C /usr/local/ivy --strip-components=1 && \
+    mv /usr/local/ivy/ivy-2.5.2.jar /usr/share/ant/lib/ivy.jar
 
-# Download and install Apache Ant
-RUN wget https://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.zip && \
-    unzip apache-ant-${ANT_VERSION}-bin.zip && \
-    mv apache-ant-${ANT_VERSION} $ANT_HOME && \
-    rm apache-ant-${ANT_VERSION}-bin.zip
+# Set the classpath for Ant to recognize Ivy
+ENV ANT_HOME=/usr/share/ant
+ENV ANT_LIB=$ANT_HOME/lib
 
-# Create Ivy directory and install Ivy
-RUN mkdir -p $IVY_HOME && \
-    curl -L https://dlcdn.apache.org/ant/ivy/${IVY_VERSION}/apache-ivy-${IVY_VERSION}-bin.tar.gz | tar xz -C $IVY_HOME --strip-components=1 && \
-    mv $IVY_HOME/ivy-${IVY_VERSION}.jar $ANT_HOME/lib/ivy.jar  # Move Ivy to Ant's lib directory
+# Add the Ivy jar to the classpath
+RUN echo "ivy.jar" >> /usr/share/ant/lib/antlib.properties
 
-# Set the classpath for Ivy
-ENV CLASSPATH=$CLASSPATH:$IVY_HOME/ivy.jar
 
-# Validate the installation
-RUN ant -version && java -version
-
-# Optionally: Run any other Ant commands if needed
-# RUN ant all
+CMD ["ant"]

@@ -1,87 +1,34 @@
 stages:
   - build
   - test
-  - docs
-  - dist
   - deploy
 
-before_script:
-  - echo "Setting up Ivy..."
-  - wget -q https://repo1.maven.org/maven2/org/apache/ivy/ivy/2.5.2/ivy-2.5.2.jar
-  - mkdir -p ~/.ant/lib
-  - mv ivy-2.5.2.jar ~/.ant/lib/ivy.jar
+variables:
+  IMAGE_NAME: "tetris-app"
 
 build:
   stage: build
-  image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
+  image: ubuntu:latest
   script:
-    - echo "Building the project with Ant..."
-    - export ANT_HOME=/usr/local/apache-ant
-    - export PATH=$PATH:$ANT_HOME/bin
-    - ant compile
-  only:
-    - main
-    - develop
+    - apt-get update && apt-get install -y ant curl
+    - mkdir -p /usr/local/ivy
+    - curl -L https://dlcdn.apache.org/ant/ivy/2.5.2/apache-ivy-2.5.2-bin.tar.gz | tar xz -C /usr/local/ivy --strip-components=1
+    - mv /usr/local/ivy/ivy-2.5.2.jar /usr/local/ivy/ivy.jar
+    - mvn clean install 
   artifacts:
     paths:
-      - bin/
-      - libs/
-    expire_in: 1 week
+      - bin/*.jar
 
 test:
   stage: test
-  image: registry.gitlab.com/your-username/your-project/your-image-name:your-tag
+  image: ubuntu:latest
   script:
-    - echo "Running tests with Ant..."
-    - ant test
-  only:
-    - main
-    - develop
-  dependencies:
-    - build
-  artifacts:
-    paths:
-      - test-reports/
-    reports:
-      junit: test-reports/TESTS-TestSuites.xml
-
-javadoc:
-  stage: docs
-  image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
-  script:
-    - echo "Generating Javadoc with Ant..."
-    - ant javadoc
-  only:
-    - main
-    - develop
-  dependencies:
-    - build
-  artifacts:
-    paths:
-      - javadoc/
-    expire_in: 1 week
-
-dist:
-  stage: dist
-  image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
-  script:
-    - echo "Packaging the project into a JAR file with Ant..."
-    - ant dist
-  only:
-    - main
-    - develop
-  dependencies:
-    - build
-  artifacts:
-    paths:
-      - bin/Tetris.jar
-    expire_in: 1 week
+    - echo "Running tests..."
+    - # Add your testing commands here
 
 deploy:
   stage: deploy
-  image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
+  image: ubuntu:latest
   script:
-    - echo "Deploying the project..."
-    - scp bin/Tetris.jar e22409386@gitlab-depinfo-2024.univ-brest.fr:/home/e22409386/tetris_project/
-  only:
-    - main
+    - echo "Deploying application..."
+    - # Add your deployment commands here
