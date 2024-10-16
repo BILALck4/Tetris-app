@@ -1,0 +1,32 @@
+stages:
+  - build
+  - test
+  - deploy
+
+# Étape de compilation
+compile_job:
+  stage: build
+  script:
+    - apt-get update && apt-get install -y openjdk-17-jdk ant
+    - ant compile
+  artifacts:
+    paths:
+      - bin/
+
+# Étape de tests
+test_job:
+  stage: test
+  script:
+    - apt-get update && apt-get install -y openjdk-17-jdk ant
+    - ant test
+  dependencies:
+    - compile_job
+
+# Étape de déploiement
+deploy_job:
+  stage: deploy
+  script:
+    - echo "Déploiement en cours..."
+    - scp -r bin/ user@yourserver.com:/path/to/deploy/
+  only:
+    - master
