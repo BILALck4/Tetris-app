@@ -7,7 +7,7 @@ stages:
 
 build:
   stage: build
-  image: registry.gitlab.com/your-username/your-project/your-image-name:your-tag
+  image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
   script:
     - echo "Building the project with Ant..."
     - export ANT_HOME=/usr/local/apache-ant
@@ -41,7 +41,7 @@ test:
 
 javadoc:
   stage: docs
-  image: registry.gitlab.com/your-username/your-project/your-image-name:your-tag
+  image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
   script:
     - echo "Generating Javadoc with Ant..."
     - ant javadoc
@@ -57,7 +57,7 @@ javadoc:
 
 dist:
   stage: dist
-  image: registry.gitlab.com/your-username/your-project/your-image-name:your-tag
+  image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
   script:
     - echo "Packaging the project into a JAR file with Ant..."
     - ant dist
@@ -79,9 +79,3 @@ deploy:
     - scp bin/Tetris.jar e22409386@gitlab-depinfo-2024.univ-brest.fr:/home/e22409386/tetris_project/
   only:
     - main
-  dependencies:
-    - dist
-  environment:
-    name: production
-    url: http://your-production-url
-  when: manual
