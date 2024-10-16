@@ -12,7 +12,7 @@ build:
   stage: build
   script:
     - echo "Building the project..."
-    - apt-get update && apt-get install -y ant
+    - sudo apt-get update && apt-get install -y ant
     - ant clean compile
   artifacts:
     paths:
