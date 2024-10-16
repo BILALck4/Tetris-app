@@ -16,7 +16,8 @@ build:
     - develop
   artifacts:
     paths:
-      - output/
+      - bin/
+      - libs/
     expire_in: 1 week
 
 test:
@@ -65,7 +66,7 @@ dist:
     - build
   artifacts:
     paths:
-      - dist/
+      - bin/Tetris.jar
     expire_in: 1 week
 
 deploy:
@@ -73,7 +74,7 @@ deploy:
   image: registry.gitlab.com/e22409386/TP-ANT-JUnit/image1:tag
   script:
     - echo "Deploying the project..."
-    - scp dist/Tetris.jar e22409386@gitlab-depinfo-2024.univ-brest.fr:/home/e22409386/tetris_project/
+    - scp bin/Tetris.jar e22409386@gitlab-depinfo-2024.univ-brest.fr:/home/e22409386/tetris_project/
   only:
     - main
   dependencies:
