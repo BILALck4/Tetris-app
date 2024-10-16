@@ -1,29 +1,20 @@
 image: docker:latest
 
+services:
+  - docker:dind
+
+variables:
+  IMAGE_NAME: tetris-app
+  IMAGE_TAG: latest
+
 stages:
   - build
 
-variables:
-  DOCKER_IMAGE: "tetris-app"
-
 build:
   stage: build
-  services:
-    - docker:dind  # Use Docker-in-Docker service
-  variables:
-    DOCKER_HOST: tcp://docker:2375  # Set Docker host for the service
-    DOCKER_DRIVER: overlay2  # Use the overlay2 storage driver
+  tags:
+    - dosi
+
   script:
-    - echo "Checking files in current directory:"
-    - ls -l 
-    - docker build --no-cache -t $DOCKER_IMAGE .  
-    - echo "Creating temporary container..."
-    - docker create --name temp_container $DOCKER_IMAGE
-    - echo "Copying Tetris.jar from container..."
-    - docker cp temp_container:/app/dist/Tetris.jar .  # Adjust the path if necessary
-    - docker rm temp_container
-  only:
-    - main
-  artifacts:
-    paths:
-      - dist/Tetris.jar  
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker run --rm $IMAGE_NAME:$IMAGE_TAG
