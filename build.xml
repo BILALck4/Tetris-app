@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href=""?>
+	<project name="Compilation de Tetris" default="dist" basedir="."  xmlns:ivy="antlib:org.apache.ivy.ant">
+	    
+	    <property name="src.dir" value="src" />
+	    <property name="obj.dir" value="bin" />
+	    <property name="libs.dir" value="lib" />
+	    <property name="main-class" value="fr.ubo.tetris.Tetris" />
+	    <property name="compile.classpath" value="${libs.dir}/commons-lang3-3.12.0.jar" />
+	    <property name="version" value="1.0.0" />
+	    <property name="test.dir" location="test" />
+	    <property name="test.results.dir" value="bin/test-results" />
+	    <property name="test.reports" location="test-reports" />
+	    <property name="doc.dir" location="javadoc" />
+	
+		<path id="ivy.classpath">
+		        <fileset dir="${libs.dir}">
+		            <include name="**/*.jar" />
+		        </fileset>
+		    </path>
+		
+	    <target name="clean">
+	        <echo message="Suppression des fichiers issus de la compilation" />
+	        <delete dir="${obj.dir}" />
+	    	<delete dir="lib" />
+	    	<mkdir dir="lib" />
+	        <delete dir="${test.results.dir}" />
+	        <delete dir="${test.reports}" />
+	        <delete dir="${doc.dir}" />
+	    </target>
+	
+	    <target name="compile" depends="clean,retrieve">
+	        <!-- Création du répertoire de compilation -->
+	        <mkdir dir="${obj.dir}" />
+	        
+	        <!-- Compilation des sources -->
+	        <javac srcdir="${src.dir}" destdir="${obj.dir}" classpathref="ivy.classpath" source="17" target="17" />
+	        
+	        <echo message="Compilation des fichiers terminée." />
+	    </target>
+	
+		
+	    <target name="compile-test" depends="compile">
+	        <mkdir dir="${obj.dir}" />
+	        <javac srcdir="${test.dir}" destdir="${obj.dir}" classpathref="ivy.classpath" />
+	    </target>
+
+		
+		<!-- Test target using JUnit -->
+		    <target name="test" depends="compile-test">
+		        <mkdir dir="${test.results.dir}" />
+		        <junit printsummary="on" haltonfailure="yes">
+		            <classpath>
+		                <path refid="ivy.classpath" />
+		                <pathelement location="${obj.dir}" />
+		            </classpath>
+		            <formatter type="plain" />
+		            <formatter type="xml" />
+		            <batchtest todir="${test.results.dir}">
+		                <fileset dir="${test.dir}">
+		                    <include name="**/Test*.java" />
+		                </fileset>
+		            </batchtest>
+		        </junit>
+		    </target>
+
+		    <!-- Test-reports target to generate HTML reports -->
+		    <target name="test-reports" depends="test">
+		        <mkdir dir="${test.reports}" />
+		        <junitreport todir="${test.reports}">
+		            <fileset dir="${test.results.dir}">
+		                <include name="**/*.xml" />
+		            </fileset>
+		            <report format="frames" todir="${test.reports}" />
+		        </junitreport>
+		    </target>
+
+		    <!-- Javadoc target -->
+		    <target name="javadoc">
+		        <mkdir dir="${doc.dir}" />
+		        <javadoc sourcepath="${src.dir}" destdir="${doc.dir}" classpathref="ivy.classpath" />
+		    </target>
+
+		
+		
+		<target name="dist" depends="compile">
+		    <jar jarfile="${obj.dir}/Tetris.jar" basedir="${obj.dir}">
+		        <manifest>
+	                <attribute name="Built-By" value="Bilal CHEKHCHOU" />
+		            <attribute name="Main-Class" value="fr.ubo.tetris.Tetris" />
+		            <attribute name="Class-Path" value="../${compile.classpath}" /> 
+		        </manifest>
+		    </jar>
+		</target>
+		
+	    <!-- All target that runs everything -->
+	    <target name="all" depends="dist, test-reports, javadoc">
+	        <echo message="Build complete: JAR creation, test execution, report generation, and documentation finished." />
+	    </target>
+		
+		  <target name="retrieve">
+		        <ivy:settings />
+		        <ivy:resolve />
+		        <ivy:retrieve sync="true" type="jar" />
+		    </target>
+	</project>
