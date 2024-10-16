@@ -10,6 +10,8 @@ build:
   image: registry.gitlab.com/your-username/your-project/your-image-name:your-tag
   script:
     - echo "Building the project with Ant..."
+    - export ANT_HOME=/usr/local/apache-ant
+    - export PATH=$PATH:$ANT_HOME/bin
     - ant compile
   only:
     - main
