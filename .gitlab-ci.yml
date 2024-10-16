@@ -1,4 +1,4 @@
-image: openjdk:17-slim
+image: openjdk:17
 
 # Define stages in the pipeline
 stages:
@@ -47,5 +47,4 @@ deploy:
     - echo "Déploiement en cours..."
     - scp -r bin/ e22409386@gitlab-depinfo-2024.univ-brest.fr:/home/e22409386/tetris_project/
   only:
-    - master  # Adjust this if you want to deploy from other branches as well
-
+    - main  # Adjust this if you want to deploy from other branches as well
