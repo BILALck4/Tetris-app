@@ -1,20 +1,40 @@
-image: docker:latest
-
-services:
-  - docker:dind
-
-variables:
-  IMAGE_NAME: tetris-app
-  IMAGE_TAG: latest
-
 stages:
   - build
+  - test
+  - deploy
 
-build:
+# Build stage
+build_job:
   stage: build
-  tags:
-    - dosi
-
+  image: tetris-app  
+  before_script:
+    - apt-get update -y
+    - apt-get install -y ant curl
   script:
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
-    - docker run --rm $IMAGE_NAME:$IMAGE_TAG
+    - ant clean
+    - ant compile  
+  artifacts:
+    paths:
+      - bin/  
+
+# Test stage
+test_job:
+  stage: test
+  image: tetris-app
+  before_script:
+    - apt-get update -y
+    - apt-get install -y ant curl
+  script:
+    - ant test-reports  # Run tests and generate reports
+  artifacts:
+    paths:
+      - test-reports/  # Save test reports as artifacts
+
+# Deploy stage (optional)
+deploy_job:
+  stage: deploy
+  script:
+    - echo "Deploying the application..."
+    # Add your custom deploy steps here, if any
+  only:
+    - main  # Only deploy from the main branch
