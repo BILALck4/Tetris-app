@@ -3,30 +3,32 @@ stages:
   - test
   - deploy
 
-# Étape de compilation
+
 compile_job:
   stage: build
+  image: openjdk:17  # Use a pre-configured image for Java
   script:
-    - apt-get update && apt-get install -y openjdk-17-jdk ant
+    - apt-get update && apt-get install -y ant
     - ant compile
   artifacts:
     paths:
       - bin/
 
-# Étape de tests
+
 test_job:
   stage: test
+  image: openjdk:17
   script:
-    - apt-get update && apt-get install -y openjdk-17-jdk ant
+    - apt-get update && apt-get install -y ant
     - ant test
   dependencies:
     - compile_job
 
-# Étape de déploiement
 deploy_job:
   stage: deploy
   script:
     - echo "Déploiement en cours..."
-    - scp -r bin/ user@yourserver.com:/path/to/deploy/
+    - scp -r bin/ e22409386@gitlab-depinfo-2024.univ-brest.fr:/home/e22409386/tetris_project/
+
   only:
     - master
