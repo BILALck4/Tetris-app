@@ -1,34 +1,18 @@
+image: ubuntu:latest
+
 stages:
   - build
   - test
-  - deploy
 
-variables:
-  IMAGE_NAME: "tetris-app"
+before_script:
+  - apt-get update && apt-get install -y ant openjdk-17-jdk openjdk-17-jre
 
 build:
   stage: build
-  image: ubuntu:latest
   script:
-    - apt-get update && apt-get install -y ant curl
-    - mkdir -p /usr/local/ivy
-    - curl -L https://dlcdn.apache.org/ant/ivy/2.5.2/apache-ivy-2.5.2-bin.tar.gz | tar xz -C /usr/local/ivy --strip-components=1
-    - mv /usr/local/ivy/ivy-2.5.2.jar /usr/local/ivy/ivy.jar
-    - mvn clean install 
-  artifacts:
-    paths:
-      - bin/*.jar
+    - ant dist  # Adjust this command based on your build process
 
 test:
   stage: test
-  image: ubuntu:latest
   script:
-    - echo "Running tests..."
-    - # Add your testing commands here
-
-deploy:
-  stage: deploy
-  image: ubuntu:latest
-  script:
-    - echo "Deploying application..."
-    - # Add your deployment commands here
+    - ant test  # Adjust this command based on your test process
