@@ -43,9 +43,6 @@ notify-discord:
   stage: notify
   image: bilalck4/tetris-app
   script:
-    - >
-      curl -H "Content-Type: application/json" \
-      -d "{\"content\": \"🎉 Le pipeline GitLab a réussi ! Build & Déploiement de l'application **Tetris** ont été effectués avec succès !\"}" \
-      "https://discord.com/api/webhooks/1296454102598942811/j_UAjhRF0u4t1q10LxiK5Qj90B5bNXL_YM4Tcuz4vGDoXourtN9fIGfQ_lKF-OjvBkld"
+    - curl -H "Content-Type: application/json" -d "{\"content\": \"🎉 Le pipeline GitLab a réussi ! Build & Déploiement de l'application **Tetris** ont été effectués avec succès !\"}" "https://discord.com/api/webhooks/1296454102598942811/j_UAjhRF0u4t1q10LxiK5Qj90B5bNXL_YM4Tcuz4vGDoXourtN9fIGfQ_lKF-OjvBkld"
   only:
     - main
