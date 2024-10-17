@@ -12,6 +12,8 @@ stages:
 build:
   stage: build 
   script:
+    - unset DOCKER_HOST
+    - docker login -u bilalck4 -p bilalck.BREST24
     - docker buildx build -t bilalck/tetris-app .
     - docker run -it  --rm tetris-app  
   artifacts:
