@@ -44,7 +44,7 @@ notify:
   script:
     - echo "Envoi de la notification à Discord..."
     - >
-      curl -H "Content-Type: application/json" \
-      -d '{"content": "🎉 Le pipeline GitLab a réussi ! Build & Déploiement de l'application **Tetris** ont été effectués avec succès !"}' \
-      $DISCORD_WEBHOOK_URL
+    curl -H "Content-Type: application/json" \
+    -d '{"content": "🎉 Le pipeline GitLab a réussi ! Build & Déploiement de l'application **Tetris** ont été effectués avec succès !"}' \
+    $DISCORD_WEBHOOK_URL
   when: always
