@@ -16,7 +16,7 @@ build:
     - apt-get update -y
     - apt-get install -y ant curl
   script:
-    - docker build -t tetris-app .
+    - docker build .
     - docker run -it  --rm tetris-app
     - ant clean
     - ant compile  
