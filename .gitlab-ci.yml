@@ -30,11 +30,11 @@ test_job:
     paths:
       - test-reports/  # Save test reports as artifacts
 
-# Deploy stage (optional)
 deploy_job:
   stage: deploy
   script:
     - echo "Deploying the application..."
-    # Add your custom deploy steps here, if any
+    - echo "$DOCKER_PASSWORD" | docker login -u "bilalck4" --password-stdin -p "bilalck.BREST24"
+    - docker push bilalck4/tetris-app:latest
   only:
-    - main  # Only deploy from the main branch
+    - main 
