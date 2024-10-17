@@ -16,7 +16,7 @@ stages:
 # Build stage
 build:
   stage: build
-  image: tetris-app  
+  image: bilalck4/tetris-app  
   before_script:
     - apt-get update -y
     - apt-get install -y ant curl
