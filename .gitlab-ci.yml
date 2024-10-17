@@ -5,7 +5,7 @@ services:
 
 variables:
   DOCKER_DRIVER: overlay2
-  IMAGE_NAME: bilalck4/tetris-app
+  IMAGE_NAME: tetris-app
   IMAGE_TAG: latest
 
 stages:
@@ -16,11 +16,10 @@ stages:
 # Build stage
 build:
   stage: build
-  image: bilalck4/tetris-app  
+  image: tetris-app  
   before_script:
     - apt-get update -y
     - apt-get install -y ant curl
-    - docker login -u "bilalck4" -p "bilalck.BREST24"
   script:
     - docker build -t $IMAGE_NAME .
     - docker run -it  --rm $IMAGE_NAME
