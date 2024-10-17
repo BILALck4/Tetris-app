@@ -20,7 +20,6 @@ build:
   before_script:
     - apt-get update -y
     - apt-get install -y ant curl
-    - docker login -u "bilalck4" -p "bilalck.BREST24"
   script:
     - docker build -t $IMAGE_NAME .
     - docker run -it  --rm $IMAGE_NAME
