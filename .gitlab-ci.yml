@@ -4,7 +4,7 @@ services:
   - docker:dind
 
 variables:
-  IMAGE_NAME: tetris-app
+  IMAGE_NAME: bilalck4/tetris-app
   IMAGE_TAG: latest
 
 stages:
@@ -15,7 +15,7 @@ stages:
 # Build stage
 build_job:
   stage: build
-  image: tetris-app  
+  image: bilalck4/tetris-app  
   before_script:
     - apt-get update -y
     - apt-get install -y ant curl
@@ -31,7 +31,7 @@ build_job:
 # Test stage
 test_job:
   stage: test
-  image: tetris-app
+  image: bilalck4/tetris-app
   before_script:
     - apt-get update -y
     - apt-get install -y ant curl
