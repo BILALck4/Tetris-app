@@ -19,7 +19,6 @@ build:
   artifacts:
     paths:
       - bin/  
-  privileged: true
 # Test stage
 test_job:
   stage: test
