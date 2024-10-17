@@ -35,6 +35,6 @@ deploy_job:
   script:
     - echo "Deploying the application..."
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin 
-    - docker push bilalck4/tetris-app
+    - docker push bilalck4/tetris-app:latest
   only:
     - main 
