@@ -3,11 +3,6 @@ image: docker:latest
 services:
   - docker:dind
 
-variables:
-  DOCKER_DRIVER: overlay2
-  IMAGE_NAME: bilalck4/tetris-app
-  IMAGE_TAG: latest
-
 stages:
   - build
   - test
