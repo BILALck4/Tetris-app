@@ -12,7 +12,7 @@ stages:
 build:
   stage: build 
   script:
-    - docker buildx build -t bilalck/tetris-app --plateform linux/arm64 .
+    - docker buildx build -t bilalck/tetris-app .
     - docker run -it  --rm tetris-app  
   artifacts:
     paths:
