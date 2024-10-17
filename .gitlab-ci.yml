@@ -10,16 +10,10 @@ stages:
 
 # Build stage
 build:
-  stage: build
-  image: bilalck4/tetris-app  
-  before_script:
-    - apt-get update -y
-    - apt-get install -y ant curl
+  stage: build 
   script:
-    - docker build tetris-app .
-    - docker run -it  --rm tetris-app
-    - ant clean
-    - ant compile  
+    - docker build -t bilalck/tetris-app .
+    - docker run -it  --rm tetris-app  
   artifacts:
     paths:
       - bin/  
