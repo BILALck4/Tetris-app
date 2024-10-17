@@ -13,7 +13,7 @@ build:
   stage: build 
   script:
     - docker buildx build -t bilalck/tetris-app:latest .
-    - docker run  --rm tetris-app  
+    - docker run  --rm bilalck4/tetris-app  
   artifacts:
     paths:
       - bin/  
