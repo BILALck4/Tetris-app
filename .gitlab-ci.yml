@@ -32,7 +32,6 @@ test_job:
 
 deploy_job:
   stage: deploy
-  image: bilalck4/tetris-app
   script:
     - echo "Deploying the application..."
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin 
