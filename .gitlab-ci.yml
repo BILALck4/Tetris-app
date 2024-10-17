@@ -12,13 +12,6 @@ stages:
   - test
   - deploy
 
-
-build:
-  stage: build
-  script:
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
-    - docker run --rm $IMAGE_NAME:$IMAGE_TAG
-
 # Build stage
 build_job:
   stage: build
