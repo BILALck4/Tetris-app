@@ -41,6 +41,7 @@ test_job:
 
 notify-discord:
   stage: notify
+  image: bilalck4/tetris-app
   script:
     - >
       curl -H "Content-Type: application/json" \
