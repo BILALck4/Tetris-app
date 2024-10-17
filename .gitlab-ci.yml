@@ -1,7 +1,23 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  IMAGE_NAME: tetris-app
+  IMAGE_TAG: latest
+
 stages:
   - build
   - test
   - deploy
+
+
+build:
+  stage: build
+  script:
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker run --rm $IMAGE_NAME:$IMAGE_TAG
 
 # Build stage
 build_job:
@@ -11,6 +27,8 @@ build_job:
     - apt-get update -y
     - apt-get install -y ant curl
   script:
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker run --rm $IMAGE_NAME:$IMAGE_TAG
     - ant clean
     - ant compile  
   artifacts:
@@ -25,7 +43,7 @@ test_job:
     - apt-get update -y
     - apt-get install -y ant curl
   script:
-    - ant test-reports  # Run tests and generate reports
+    - ant test  # Run tests and generate reports
   artifacts:
     paths:
       - test-reports/  # Save test reports as artifacts
