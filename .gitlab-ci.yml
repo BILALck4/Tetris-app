@@ -6,7 +6,7 @@ services:
 stages:
   - build
   - test
-  - deploy
+  - notify
 
 # Build stage
 build:
@@ -30,11 +30,18 @@ test_job:
     paths:
       - test-reports/  # Save test reports as artifacts
 
-deploy_job:
-  stage: deploy
+#deploy_job:
+#  stage: deploy
+#  script:
+#    - echo "Deploying the application..."
+#    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin 
+#    - docker push bilalck4/tetris-app:latest
+#  only:
+#    - main 
+
+notify:
+  stage: notify
   script:
-    - echo "Deploying the application..."
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin 
-    - docker push bilalck4/tetris-app:latest
-  only:
-    - main 
+    - echo "Envoi de la notification à Discord..."
+    - curl -H "Content-Type: application/json" -d "{\"content\": \"🎉 Le pipeline GitLab a réussi ! Build & Déploiement de l'application **Tetris** ont été effectués avec succès !\"}" $DISCORD_WEBHOOK_URL
+  when: always
